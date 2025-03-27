@@ -30,6 +30,7 @@ public class Panel extends JFrame {
             String text = textArea.getText();
             System.out.println(text);
             agenda.write(text);
+            setVisible(false);
         });
         setVisible(true);
     }

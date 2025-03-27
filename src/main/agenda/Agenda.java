@@ -13,7 +13,6 @@ public class Agenda {
     private File file;
 
     public Agenda(String dir) {
-        System.out.println(getTodayDate());
         this.dir = dir;
         createDirectory();
     }
@@ -27,33 +26,33 @@ public class Agenda {
         File dir = new File(this.dir);
         if (!dir.exists()) {
             dir.mkdirs();
+            System.out.println("Diretório '" + this.dir + "' criado com sucesso");
+        } else {
+            System.out.println("Diretório '" + this.dir + "' já existe");
         }
     }
 
-    private boolean createFile() {
-
-        this.file = new File(this.dir + "/" + getTodayDate() + ".txt");
-
-        try {
-            return this.file.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+    private void createFileIfNotExists() {
+        if (this.file == null || !this.file.exists()) {
+            this.file = new File(this.dir + "/" + getTodayDate() + ".txt");
+            try {
+                this.file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private static String getTodayDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yyyy");
         Date today = new Date();
         return sdf.format(today);
     }
 
     public boolean write(String content) {
-        if (!createFile()) {
-            return false;
-        }
 
         try {
+            createFileIfNotExists();
             FileWriter fw = new FileWriter(this.file, true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write(content);
